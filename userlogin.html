@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword ,createUserWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+
+   import { getDoc , doc, setDoc,getFirestore,collection, addDoc, query, where } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js"; 
+    
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBCXZymUy9xJ4uKwZIZQf1XznGx3g7u68g",
+      authDomain: "shubhchintak-f11be.firebaseapp.com",
+      projectId: "shubhchintak-f11be",
+      storageBucket: "shubhchintak-f11be.appspot.com",
+      messagingSenderId: "201815614610",
+      appId: "1:201815614610:web:65428be0c8e5b25535b24b"
+    };
+    const app = initializeApp(firebaseConfig);
+    //*********************************imp***********************************************************
+    getAuth(app).onAuthStateChanged(function(user) {
+  if (user) {
+    const db = getFirestore(app);
+    getDoc(doc(db, "users", user.email)).then(docSnap => {
+  if (docSnap.exists()) {
+    //.//console.log("Document data:", docSnap.data());
+   
+    if(docSnap.data().role==="common")
+    window.location.href = "cdash.html";
+    else{
+      window.location.href = "ldash.html";
+    }
+    
+  } 
+  else {
+    console.log("No such document!");
+  }
+})
+  } else {
+    alert(user.data())// No user is signed in.
+  }
+});
+    //*********************************imp***********************************************************
+ 
+    document.getElementById("b1").addEventListener("click",signin)
+    function signin()
+    {
+      document.getElementById("ww").style.display="block";
+     
+      var email= document.getElementById("em").value.trim();
+      var password=document.getElementById("pwd").value.trim();
+
+      if(email=='')
+      {
+        alert("email cannot be null")
+        document.getElementById("ww").style.display="none";
+      }
+      else if(passwrod=='')
+      {
+        alert("Password cannot be null")
+        document.getElementById("ww").style.display="none";
+      }
+      else
+      {
+      const auth= getAuth(app)
+signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+
+    const db = getFirestore(app);
+    const user = userCredential.user;
+    getDoc(doc(db, "users", email)).then(docSnap => {
+  if (docSnap.exists()) {
+    //.//console.log("Document data:", docSnap.data());
+   
+    if(docSnap.data().role==="common")
+    window.location.href = "cdash.html";
+    else{
+      window.location.href = "ldash.html";
+    }
+    
+  } 
+  else {
+    console.log("No such document!");
+    document.getElementById("ww").style.display="none";
+  }
+})
+
+    //window.location.href = "cdash.html";
+
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    alert(errorMessage)
+    document.getElementById("ww").style.display="none";
+  });
+}
+    }
+document.getElementById("b2").addEventListener("click", signup);
+
+function signup() {
+
+ document.getElementById("ww").style.display="block";
+
+
+  
+
+    var email=document.getElementById("email").value.trim();
+    var name=document.getElementById("name").value.trim();
+    var dob=document.getElementById("dob").value.trim();
+    var mobile=document.getElementById("mob").value.trim();
+    var pass=document.getElementById("pwd2").value.trim();
+    var pass1=document.getElementById("pwd12").value.trim();
+    var e = document.getElementById("role").value;
+    var address="users/"+email;
+
+ if(email=='',name=='' ,
+ dob=='' ,mobile=='',
+ pass=='',pass1==''
+  )
+ {
+  alert("value cannot be Empty")
+  document.getElementById("ww").style.display="none";
+ }
+ else if(pass!=pass1  )
+ {
+ alert("Password do not match")
+ document.getElementById("ww").style.display="none";
+ }
+ else
+ {
+const auth = getAuth();
+console.log("2sdfasdf")
+const db = getFirestore(app);
+try{
+var add='advocate/'+email;
+console.log(add)
+  const docData =  {
+    Name: name,
+    dob: dob,
+    mobile: mobile,
+    role:e
+  };
+  setDoc(doc(db,"users",email), docData);
+  try{
+    createUserWithEmailAndPassword(auth, email, pass)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+ 
+    alert("Registered Successfully , Please Wait")
+   if(e==="common")
+    window.location.href = "cdash.html";
+    else
+    window.location.href="ldash.html";
+    // ...
+  })
+  .catch((error) => {
+    document.getElementById("ww").style.display="none";
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    alert(errorMessage)
+    // ..
+  });
+}
+catch(e)
+{
+ alert(e);
+ document.getElementById("ww").style.display="none";
+}
+}
+  
+
+catch(e)
+{
+  alert(e);
+  document.getElementById("ww").style.display="none";
+}
+
+ }
+}
+  </script>
+  
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<!-- <script src="./node_modules/bootstrap/dist/js/bootstrap.js"></script>
+<script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="./node_modules/@popperjs/core/dist/umd/popper.min.js"></script> -->
+     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,200&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/9.11.0/firebase-app.js"></script>
+    <title> Shubhchintak </title>
+    <link rel=”stylesheet” href=”https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css” integrity=”sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh” crossorigin=”anonymous”>
+</head>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="index.html">Shubhchintak</a><a class="navbar-brand" href="index.html">
+      <img src="./images/gravel.svg"" width="30" height="30" alt="">
+    </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+   
+  </button>
+  
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active">
+          
+        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+          
+        <a class="nav-link" href="userlogin.html">Login</a>
+        
+
+      </li>
+    <li class="nav-item">
+      
+          <a class="nav-link" href="./aboutus.html">About us</a>
+        </li>
+    </ul>
+   
+  </div>
+</nav>
+
+
+
+
+<body>
+  <div id="ww" class="lds-roller" style="position:absolute;left:50%;top:50%; z-index: 4; display: none;"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+   
+    <div class="container">
+        
+
+         
+   
+            <div class="frame">
+              <div class="ander">
+
+
+                <div class="card">
+        
+                  <ul class="nav nav-pills nav-fill" >
+                        <li class="nav-item text-center" >
+                          <a class="nav-link active btl" style="color: black;"  id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Login</a>
+                        </li>
+                        <li class="nav-item text-center">
+                          <a class="nav-link btr" id="pills-profile-tab"  style="color: black;" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Signup</a>
+                        </li>
+                       
+                      </ul>
+                      <div class="tab-content"  id="pills-tabContent">
+                        <div class="tab-pane fade show active"  id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                          
+                          <div>
+        
+                            <br>  <br>
+                   <div class="login"style="background-color: rgba(231, 231, 231, 0.836); width:60% ;text-align: center; margin-left: 20%;" >
+                 
+                  
+              <h1 style="font-size: 40px;font-weight: 1200px;">LOGIN</h1>
+            </div><br> <img class="gravel" src="images/gravel2.png">
+                <br>
+               
+              <input  type="email" name="em" id="em"   placeholder="Enter your registered mail"><br>
+
+           
+           
+              <input type="password" name="pwd" id="pwd"  placeholder="Enter your password"><br>
+
+              <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            
+              <button id="b1" class="btn" >LOGIN</button>
+          
+            </button>  <br>  <br>
+        
+                          </div>
+        
+        
+        
+                        </div>
+                        <div    class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                          <br><div class="login"style="background-color: rgba(231, 231, 231, 0.836); width:60% ;text-align: center; margin-left: 20%;" >
+                 
+                  
+                            <h1 style="font-size: 40px;font-weight: 1200px;">Registration</h1>
+                          </div>
+        
+                          <div class="form px-4">
+                            <input  type="text" name="em" id="name"   placeholder="Enter your Good Name">
+                            <input  type="email" name="em" id="email"   placeholder="Enter email">
+                             <input  type="date" name="em" id="dob"   placeholder="Enter your DOB (DD/MM/YYYY)">
+                             <input  type="text" name="em" id="mob"   placeholder="Mobile Number">
+                      <span>    <input  type="password" name="em" id="pwd2"   placeholder="Create Password">
+                            <input  type="password" name="em" id="pwd12" placeholder="Create Password"></span>  
+                            <br>
+                            <br>
+
+                            <label for="role">Choose a Role:</label>
+                            <select  id="role">
+                                <option value="common">Common Man</option>
+                              <option value="advocate">Advisor/Advocate</option>
+                            
+                            
+                            </select>
+                
+                            <button id="b2" class="btn"  >Register Now</button>
+                            
+        
+                          </div>
+        
+        
+        
+                        </div>
+                        
+                       </div>
+                    
+                  
+                  
+        
+                </div>
+                
+        
+              </div>
+
+             
+            </div>
+           
+         
+  
+       
+
+  </div>
+    
+ 
+
+</body>
+</html>
+<style>
+  .gravel{
+    position: relative;
+  
+  }
+  body{
+   
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(
+    to top,
+    rgb(253, 253, 253) 0%,
+    rgb(253, 253, 253) 60%,
+    rgba(231, 231, 231, 0.836) 60%,
+    rgba(231, 231, 231, 0.836) 100%
+  );
+ 
+}
+a.active.nav-link{background-color: #000000!important;
+color: white !important;}
+
+@media (max-width:500px){
+
+  /* .ander.card,.frame,.tab-pane fade active show,.nav nav-pills nav-fill{
+    width: 100%;
+
+  }
+  .ander.card,.frame,.tab-pane fade active show.nav nav-pills nav-fill{
+    margin-left: 0px;
+    margin-right: 0px;
+
+  } */
+  h1{
+    font-size: 4px;
+  }
+  .frame{
+    margin: 0%!important;
+   
+  }
+}
+
+
+</style>
+
+
+
+  
+
+

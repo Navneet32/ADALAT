@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,200&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+    <title>Chat</title>
+</head>
+<script type="module">
+
+import { getAuth} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+import { getDatabase,child, get , onValue, ref, set ,push} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js";
+import { initializeApp  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+console.log("ok")
+const firebaseConfig = {
+      apiKey: "AIzaSyBCXZymUy9xJ4uKwZIZQf1XznGx3g7u68g",
+      authDomain: "shubhchintak-f11be.firebaseapp.com",
+      projectId: "shubhchintak-f11be",
+      storageBucket: "shubhchintak-f11be.appspot.com",
+      messagingSenderId: "201815614610",
+      // databaseURL: "https://shubhchintak-f11be-default-rtdb.firebaseio.com/",
+      appId: "1:201815614610:web:65428be0c8e5b25535b24b"
+    };
+    const app = initializeApp(firebaseConfig);
+
+   // const database = getDatabase();
+    var emaa;
+
+    var link = window.location.href;
+var nid=link.slice(-6);
+   console.log(nid)
+   const auth = getAuth();
+
+
+
+   const db = getDatabase();
+const starCountRef = ref(db,nid);
+onValue(starCountRef, (snapshot) => {
+  var div = document.getElementById('h');
+while(div.firstChild){
+    div.removeChild(div.firstChild);
+}
+  snapshot.forEach((doc) => {
+  const data = doc.val();
+  if(data.user==auth.currentUser.email)
+  {
+  var g = document.createElement('div');
+g.setAttribute("class", "fp");
+g.innerHTML=' <p style="font-size: 13px;text-align: right;font;font-family: "Open Sans", sans-serif; font-family: "Roboto", sans-serif;">'+ data.mag+'<p>   <p style="text-align:right;font-size: 7px; padding: 3px;">'+data.date+' '+data.time+'</p>';
+document.getElementById("h").appendChild(g);
+}
+else{
+  var g = document.createElement('div');
+g.setAttribute("class", "sp");
+g.innerHTML=' <p style="font-family: "Open Sans", sans-serif; font-family: "Roboto", sans-serif;font-size: 13px;text-align: left;">'+ data.mag+'<p>   <p style="text-alig:left;font-size: 7px; padding: 3px;">'+data.date+' '+data.time+'</p>';
+document.getElementById("h").appendChild(g);
+}
+
+
+document.getElementById("ww").style.display="none";
+console.log(data)
+  });
+},{
+  onlyOnce: true
+});
+
+document.getElementById("ww").style.display="none";
+
+// const db = ref(getDatabase());
+//    const starCountRef = ref(db, nid);
+// onValue(starCountRef, (snapshot) => {
+//   const data = snapshot.val();
+//  console.log(data)
+//  });
+// const db = getDatabase();
+// get(child(db,nid)).then((snapshot) => {
+//   if (snapshot.exists()) {
+//     console.log(snapshot.val());
+//   } else {
+//     console.log("No data available");
+//   }
+// }).catch((error) => {
+//   console.error(error);
+// });
+//const db = getDatabase();
+//  onValue(ref(db,nid), (snapshot) => {
+//   console.log(snapshot.val() )
+//   // ...
+// }, {onlyOnce: true
+// });
+// const fetchChat  = ref(db, nid);
+
+// // const fetchChat = db.ref(nid);
+// fetchChat.on("child_added", function (snapshot) {
+//   console.log(snapshot.val() )
+
+//   });
+    document.getElementById("chatbtn").addEventListener("click",ok)
+
+    
+   async function ok(){
+
+ 
+    await getAuth(app).onAuthStateChanged(function(user) {
+  if (user) {
+    console.log(user.email)
+funchat(user.email)
+
+
+  }
+});
+
+
+    }
+function funchat(emaa)
+{
+
+  const db = getDatabase();
+
+
+ 
+  
+                                           
+   var msg= document.getElementById("msginput").value;
+   if(msg.trim()=='' )
+   {
+ alert("Empty Message , please write something to send")
+   }
+   else
+   {
+ var g = document.createElement('div');
+g.setAttribute("class", "fp");
+g.innerHTML=' <p style="font-size: 13px;text-align: right;">'+ msg+'<p>   <p style="text-align:right;font-size: 7px; padding: 3px;">'+d+' '+t+'</p>';
+document.getElementById("h").appendChild(g);
+document.getElementById("msginput").value=null;
+document
+    .getElementById("chatbtn")
+    .scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+    const db = getDatabase();
+const postListRef = ref(db, nid);
+const newPostRef = push(postListRef);
+set(newPostRef, {
+   date:d,
+   time:t,
+   mag:msg,
+   user:emaa
+});
+}
+
+    
+}
+</script>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="index.html">Shubhchintak</a><a class="navbar-brand" href="index.html">
+      <img src="./images/gravel.svg"" width="30" height="30" alt="">
+    </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+   
+  </button>
+  
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active">
+          
+        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+          
+        <a class="nav-link" href="userlogin.html">Login</a>
+        
+
+      </li>
+    <li class="nav-item">
+      
+          <a class="nav-link" href="./aboutus.html">About us</a>
+        </li>
+    </ul>
+   
+  </div>
+</nav>
+
+<body>
+  <div id="ww" class="lds-roller" style="position:absolute;left:50%;top:50%" display="none"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    <br>
+    <br>
+<div class="container">
+ 
+<center><div class="chat" >
+    <div id="chatheading"><h3 style="font-family:roboto,open sans ;">Chat Feature Enabled </h3>
+</div>
+<div class="chatbody" id="h">
+
+    <div class="fp" id="fp">
+     <p style="font-size: 13px;text-align: right;">Hello <p>   <p style="text-align:right;font-size: 7px; padding: 3px;">10:00 am</p>
+    </div>
+  
+    <div class="sp" id="sp">
+        <p style="font-size: 13px;">Start Your chat</p>    <p style="text-align:left;font-size: 7px; padding: 3px;">10:00 am</p></div>
+        
+             
+               
+                                       
+</div>
+<span class="chatbottom">
+
+  <textarea id="msginput" type="text"></textarea>
+  <button id="chatbtn" class="chatbtn">Send</button>
+</span>
+</div>
+</div></div></center>
+</body>
+
+
+
+
+
+<script  >
+
+
+
+
+
+
+
+
+
+
+
+    document.getElementById('timer').innerHTML =10 + ":" + 00;
+    startTimer();
+    
+    
+    function startTimer() {
+      var presentTime = document.getElementById('timer').innerHTML;
+      var timeArray = presentTime.split(/[:]+/);
+      var m = timeArray[0];
+      var s = checkSecond((timeArray[1] - 1));
+      if(s==59){m=m-1}
+      if(m<0){
+        return
+      }
+      
+      document.getElementById('timer').innerHTML =
+        m + ":" + s;
+     // console.log(m)
+      setTimeout(startTimer, 1000);
+      
+    }
+    
+    function checkSecond(sec) {
+      if (sec < 10 && sec >= 0) {sec = "0" + sec}; // add zero in front of numbers < 10
+      if (sec < 0) {sec = "59"};
+      return sec;
+    }
+        </script>
+        <style>
+            *{
+                box-sizing: border-box;
+                margin: 0% 0% ;
+            }
+        .chat
+        
+           { 
+            position: relative;
+             font-family: 'Open Sans', sans-serif;
+                font-family: 'Roboto', sans-serif;
+                box-sizing:content-box;
+          border-radius: 10px;
+          box-shadow: 5px 5px 5px 5px silver;
+         height:600px;
+                width:360px;
+                overflow: scroll;
+                text-align:center;
+    }
+#chatheading{
+    background-color:grey ;
+    padding:2%;
+    color: white;
+}
+#chatbody{
+   background-color:  rgba(231, 231, 231, 0.836);
+  
+ 
+}
+.fp{
+    display: block;
+    border-radius: 25px;
+    text-align: right;
+    margin: 2%;
+    padding:7px;
+    background-color:rgba(240, 234, 234, 0.644); font-family: 'Open Sans', sans-serif;
+                font-family: 'Roboto', sans-serif;
+ 
+
+}
+.sp{
+    display: block;
+    border-radius: 25px;
+    text-align: left;
+    padding: 7px; 
+    margin: 2%;
+    background-color:rgba(241, 239, 239, 0.836); font-family: 'Open Sans', sans-serif;
+                font-family: 'Roboto', sans-serif;
+    
+}
+
+#msginput{
+    border-top: 0ch;
+    border-left: 0ch;
+    border-right: 0ch;
+  padding:10px;
+  bottom: 6%;
+
+    
+}
+.chatbtn
+{
+padding: 3%;
+border-radius: 25px;
+padding-left: 5%;
+padding-right: 5%;
+margin-left: 15px;
+border-style: none;
+position: absolute,fixed;
+bottom: 8%;
+width:20%;
+right: 2%;
+
+}
+.chatbtn:hover
+{
+background-color: black;
+color:white
+}
+#msginput:focus{
+    border-top: 0ch;
+    border-left: 0ch;
+    border-right: 0ch;
+   background-color:  rgba(241, 239, 239, 0.836);
+   padding:10px;
+   outline: none;
+}
+#chatbottom{
+    margin-bottom: 5%;
+    position:fixed;
+}
+
+
+#msginput{
+  
+    position: absolute,fixed;
+bottom:4%;
+left: 2%;width: 75%;
+}
+        </style>
+</html>

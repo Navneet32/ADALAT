@@ -1,0 +1,21 @@
+{
+  "name": "adalt",
+  "version": "1.0.0",
+  "description": "Online advisory system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "adalt"
+  ],
+  "author": "gaurav",
+  "license": "ISC",
+  "dependencies": {
+    "@material/textfield": "^14.0.0",
+    "bootstrap": "^5.2.1",
+    "express": "^4.18.1",
+    "firebase": "^9.11.0"
+  },
+  "devDependencies": {}
+}

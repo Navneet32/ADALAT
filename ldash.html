@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,200&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <title>Shubhchintak</title>
+  </head>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+    import {
+      onSnapshot,
+      collectionGroup,
+      getDoc,
+      doc,
+      setDoc,
+      getFirestore,
+      collection,
+      addDoc,
+      query,
+      where,
+      updateDoc,
+      getDocs,
+    } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBCXZymUy9xJ4uKwZIZQf1XznGx3g7u68g",
+      authDomain: "shubhchintak-f11be.firebaseapp.com",
+      projectId: "shubhchintak-f11be",
+      storageBucket: "shubhchintak-f11be.appspot.com",
+      messagingSenderId: "201815614610",
+      appId: "1:201815614610:web:65428be0c8e5b25535b24b",
+    };
+   
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+   
+    var pm;
+    getAuth(app).onAuthStateChanged(function (user) {
+      if (user) {
+        pm = user.email;
+      }
+      document.getElementById("fnc").addEventListener("click", fnew);
+      document.getElementById("cur").addEventListener("click", current);
+      document.getElementById("fpre").addEventListener("click", fpre);
+
+      function fnew() {
+        var div = document.getElementById('table');
+while(div.firstChild){
+    div.removeChild(div.firstChild);
+}
+             
+       // document.getElementById("one").innerText = "";
+        // document.getElementById("two").style.display = "none";
+        // document.getElementById("three").style.display = "none";
+        funnew();
+      }
+      var clientemail;
+      async function funnew() {
+        try {
+          const q = query(
+            collectionGroup(db, "post"),
+            where("status", "==", "unresolved")
+          );
+          const querySnapshot = await getDocs(q);
+
+          if (querySnapshot.size > 0) {
+            querySnapshot.forEach((doc) => {
+              console.log(doc.data());
+              var box = document.getElementById("table");
+              document.getElementById("pq1").style.display = "block";
+              var row = document.getElementById("pq1");
+              var row1 = row.cloneNode(true);
+              //console.log()
+
+              row1.innerHTML =
+                '<div class="myclassq" id="' +
+                doc.data().id +
+                '" name=' +
+                doc.data().email +
+                ' ><span id="d"style="text-align: right;"><b>Date : </b>' +
+                doc.data().date +
+                '</span><br><span id="q"><b>Query:</b>' +
+                doc.data().euery +
+                '</span><br><br><span id="s"><b>Status : </b>' +
+                doc.data().status +
+                "</span></div>";
+
+              box.appendChild(row1);
+              // cities.push(doc.data().date);
+            });
+
+            var ex1 = document.getElementsByClassName("myclassq");
+
+            for (var i = 0; i < ex1.length; i++) {
+              //  console.log("in a loop")
+              ex1[i].addEventListener("click", takecase);
+            }
+
+            document.getElementById("pq1").style.display = "none";
+          } else {
+            alert("no data found");
+          }
+          console.log("Current cities in CA: ");
+        } catch (e) {
+          console.log(e);
+        }
+      }
+
+      async function takecase() {
+        console.log(this.id);
+        var d = document.getElementById(this.id).getAttribute("name");
+        console.log(d);
+        document.get;
+        try {
+          const db = getFirestore(app);
+          const washingtonRef = doc(db, "post", this.id);
+          await updateDoc(washingtonRef, {
+            status: "in progress",
+            lawyer: pm,
+          });
+          alert("case is added to your profile");
+        } catch (e) {
+          console.log(e);
+        }
+      }
+
+      async function removecase() {
+        console.log(this.id);
+        var d = document.getElementById(this.id).getAttribute("name");
+        console.log(d);
+        document.get;
+        try {
+          const db = getFirestore(app);
+          const washingtonRef = doc(db, "post", this.id);
+          await updateDoc(washingtonRef, {
+            status: "unresolved",
+            lawyer: "",
+          });
+          alert("case is removed sucessfully");
+        } catch (e) {
+          console.log(e);
+        }
+      }
+
+      async function current() {
+        var div = document.getElementById('table');
+while(div.firstChild){
+    div.removeChild(div.firstChild);
+}
+        
+        // / / document.getElementById("one").style.display = "none";
+        //document.getElementById("three").style.display = "none";
+
+        try {
+          const q = query(
+            collectionGroup(db, "post"),
+            where("lawyer", "==", pm)
+          );
+          const querySnapshot = await getDocs(q);
+
+          if (querySnapshot.size > 0) {
+            querySnapshot.forEach((doc) => {
+              console.log(doc.data());
+              var box = document.getElementById("table");
+              document.getElementById("pq1").style.display = "block";
+              var row = document.getElementById("pq1");
+              var row1 = row.cloneNode(true);
+              //console.log()
+
+              row1.innerHTML =
+                '<div class="myclassq" id="' +
+                doc.data().id +
+                '" name=' +
+                doc.data().email +
+                ' ><span id="d"style="text-align: right;"><b>Date : </b>' +
+                doc.data().date +
+                '</span><br><span id="q"><b>Query:</b>' +
+                doc.data().euery +
+                '</span><br><br><span id="s"><b>Status : </b>' +
+                doc.data().status +
+                "</span></div>";
+
+              box.appendChild(row1);
+              // cities.push(doc.data().date);
+              console.log(row1);
+            });
+
+            var ex1 = document.getElementsByClassName("myclassq");
+
+            for (var i = 0; i < ex1.length; i++) {
+              //  console.log("in a loop")
+              ex1[i].addEventListener("click", removecase);
+            }
+
+            document.getElementById("pq1").style.display = "none";
+          } else {
+            alert("no data found");
+          }
+          console.log("Current cities in CA: ");
+        } catch (e) {
+          console.log(e);
+        }
+      }
+      function fpre() {
+        var div = document.getElementById('table');
+while(div.firstChild){
+    div.removeChild(div.firstChild);
+}
+        
+        // document.getElementById("two").style.display = "none";
+        // document.getElementById("one").style.display = "none";
+        fulast();
+      }
+      async function fulast() {
+        const auth = getAuth();
+        var emo;
+        await getAuth(app).onAuthStateChanged(function (user) {
+          if (user) {
+            emo = user.email;
+          } else console.log("no user found");
+        });
+        foolast(emo);
+      }
+      async function foolast(emo) {
+        try {
+          const q = query(
+            collectionGroup(db, "post"),
+            where("status", "==", emo)
+          );
+          const querySnapshot = await getDocs(q);
+
+          if (querySnapshot.size > 0) {
+            querySnapshot.forEach((doc) => {
+              console.log(doc.data());
+              var box = document.getElementById("table");
+              document.getElementById("pq1").style.display = "block";
+              var row = document.getElementById("pq1");
+              var row1 = row.cloneNode(true);
+              //console.log()
+
+              row1.innerHTML =
+                '<span id="d"style="text-align: right;"><b>Date : </b>' +
+                doc.data().date +
+                '</span><br><span id="q"><b>Query:</b>' +
+                doc.data().euery +
+                '</span><br><br><span id="s"><b>Status : </b>' +
+                doc.data().status +
+                "</span>";
+
+              box.appendChild(row1);
+              // cities.push(doc.data().date);
+            });
+            document.getElementById("pq1").style.display = "none";
+          } else {
+            alert("no data found");
+          }
+          console.log("Current cities in CA: ");
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    });
+ document.getElementById("startchatt").addEventListener("click",onlyshow)
+
+ async function onlyshow(){
+  var div = document.getElementById('table');
+while(div.firstChild){
+    div.removeChild(div.firstChild);
+}
+
+try {
+          const q = query(
+            collectionGroup(db, "post"),
+            where("lawyer", "==", pm)
+          );
+          const querySnapshot = await getDocs(q);
+
+          if (querySnapshot.size > 0) {
+            querySnapshot.forEach((doc) => {
+              console.log(doc.data());
+              var box = document.getElementById("table");
+              document.getElementById("pq1").style.display = "block";
+              var row = document.getElementById("pq1");
+              var row1 = row.cloneNode(true);
+              //console.log()
+
+              row1.innerHTML =
+                '<div class="myclassq" id="' +
+                doc.data().id +
+                '" name=' +
+                doc.data().email +
+                ' ><span id="d"style="text-align: right;"><b>Date : </b>' +
+                doc.data().date +
+                '</span><br><span id="q"><b>Query:</b>' +
+                doc.data().euery +
+                '</span><br><br><span id="s"><b>Status : </b>' +
+                doc.data().status +
+                "</span></div>";
+
+              box.appendChild(row1);
+              // cities.push(doc.data().date);
+              console.log(row1);
+            });
+
+            var ex1 = document.getElementsByClassName("myclassq");
+
+            for (var i = 0; i < ex1.length; i++) {
+              //  console.log("in a loop")
+              ex1[i].addEventListener("click", chatting);
+            }
+
+            document.getElementById("pq1").style.display = "none";
+          } else {
+            alert("no data found");
+          }
+          console.log("Current cities in CA: ");
+        } catch (e) {
+          console.log(e);
+        }
+      }
+
+ function chatting(){
+  console.log(this.id);
+  var loc="/chat.html?"+this.id;
+        location.replace(loc);
+ }
+        
+
+
+
+</script>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="index.html">Shubhchintak</a><a class="navbar-brand" href="index.html">
+      <img src="./images/gravel.svg"" width="30" height="30" alt="">
+    </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+   
+  </button>
+  
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active">
+          
+        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+          
+        <a class="nav-link" href="userlogin.html">Login</a>
+        
+
+      </li>
+    <li class="nav-item">
+      
+          <a class="nav-link" href="./aboutus.html">About us</a>
+        </li>
+    </ul>
+   
+  </div>
+</nav>
+
+
+  <body
+    style="
+      background: linear-gradient(
+        to top,
+        rgb(253, 253, 253) 0%,
+        rgb(253, 253, 253) 100%,
+        rgba(231, 231, 231, 0.836) 100%,
+        rgba(231, 231, 231, 0.836) 200%
+      );
+    "
+  >
+  <!-- <div class="lds-roller" style="position:absolute;left:50%;top:50%; z-index: 4;"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> -->
+  
+    <br />
+    <div
+      style="
+        background-color: grey;
+        animation: fade-left 0.5s ease-out;
+        color: white;
+        width: 25%;
+        padding: 5px;
+        border-bottom-right-radius: 3%;
+        border-top-right-radius: 3%;
+      "
+    >
+      <p>welcome</p>
+    </div>
+    <div class="container">
+      <div id="hideone">
+        <div class="col">
+          <center>
+            <img src="/images/logo.jpg" width="30%" id="imgg"/>
+          </center>
+        </div>
+
+        <div class="grid">
+          <div id="flexc"  class="row grid-row">
+            <div class="col gb" id="fnc">Find New Cases</div>
+            <div class="col gb" id="startchatt">Current cases</div>
+            <div class="col gb" id="cur">Remove cases</div>
+            <div class="col gb" id="fpre">Solved Previous cases</div>
+           
+          </div>
+        </div>
+      </div>
+      <div id="one">
+        <table id="table">
+          <tr id="row1">
+            <div id="pq1" style="display: none">
+              <span id="d" style="text-align: right">Date: 12/67/2001</span>
+              <br />
+              <span id="q"
+                ><b>Query:</b>Lorem ipsum dolor sit, amet consectetur
+                adipisicing elit. Quisquam ratione voluptas totam voluptatem
+                sunt blanditiis dicta natus sit magnam earum aliquid at
+                accusamus, rem laborum aut delectus magni! Labore cupiditate
+                mollitia aliquid nam repellendus quod nostrum laboriosam quam,
+                ab illum et, rerum tempora, enim aperiam ad saepe eum accusamus
+                optio.</span
+              >
+              <br />
+              <br />
+
+              <span id="s"><b>Status :</b> "Unresolved"</span>
+            </div>
+          </tr>
+        </table>
+      </div>
+<!-- 
+      <div id="two">
+  <table id="table">
+          <tr id="row1">
+            <div id="pq1" style="display: none">
+              <span id="d" style="text-align: right">Date: 12/67/2001</span>
+              <br />
+              <span id="q"
+                ><b>Query:</b>Lorem ipsum dolor sit, amet consectetur
+                adipisicing elit. Quisquam ratione voluptas totam voluptatem
+                sunt blanditiis dicta natus sit magnam earum aliquid at
+                accusamus, rem laborum aut delectus magni! Labore cupiditate
+                mollitia aliquid nam repellendus quod nostrum laboriosam quam,
+                ab illum et, rerum tempora, enim aperiam ad saepe eum accusamus
+                optio.</span
+              >
+              <br />
+              <br />
+
+              <span id="s"><b>Status :</b> "Unresolved"</span>
+            </div>
+          </tr>
+        </table>
+      </div>
+
+      </div>
+      <div id="three">
+        <table id="table">
+          <tr id="row1">
+            <div id="pq1" style="display: none">
+              <span id="d" style="text-align: right">Date: 12/67/2001</span>
+              <br />
+              <span id="q"
+                ><b>Query:</b>Lorem ipsum dolor sit, amet consectetur
+                adipisicing elit. Quisquam ratione voluptas totam voluptatem
+                sunt blanditiis dicta natus sit magnam earum aliquid at
+                accusamus, rem laborum aut delectus magni! Labore cupiditate
+                mollitia aliquid nam repellendus quod nostrum laboriosam quam,
+                ab illum et, rerum tempora, enim aperiam ad saepe eum accusamus
+                optio.</span
+              >
+              <br />
+              <br />
+
+              <span id="s"><b>Status :</b> "Unresolved"</span>
+            </div>
+          </tr>
+        </table>
+      </div> -->
+    </div>
+    <!-- Button trigger modal -->
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+   
+    </div>
+
+    
+  </body>
+  <style>
+   @media   (max-width: 500px)
+    {
+   #flexc{
+    flex-direction: column;
+    text-align: center;
+    justify-content: space-evenly;
+   
+    
+   }
+   #imgg{
+    width: 80%;
+   }
+
+   gb{
+height:100px;
+   }
+.row grid-row{
+  width:100%;
+
+ }
+   
+    }
+
+    myclassq{
+      width: 100%;
+    }
+  </style>
+</html>
